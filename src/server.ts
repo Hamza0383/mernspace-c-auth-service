@@ -1,4 +1,15 @@
-function add(a: number) {
-    return a;
-}
-add(3);
+import app from "./app";
+import { Config } from "./config";
+
+const startServer = () => {
+    const PORT = Config.PORT;
+    try {
+        app.listen(PORT, () => {
+            console.log(`App is runing on Port ${PORT}`);
+        });
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
+};
+startServer();

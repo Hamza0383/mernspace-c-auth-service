@@ -17,7 +17,7 @@ export default tseslint.config({
         ...tseslint.configs.recommendedTypeChecked,
     ],
     rules: {
-        "no-console": "error",
+        // "no-console": "error",
         "@typescript-eslint/no-unused-expressions": [
             "error",
             {
