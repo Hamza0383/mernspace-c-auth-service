@@ -10,7 +10,7 @@ export default tseslint.config({
             tsconfigRootDir: import.meta.dirname,
         },
     },
-    ignores: ["dist", "node_modules"],
+    ignores: ["dist", "node_modules", "eslint.config.js", "jest.config.js"],
     files: ["**/*.ts"],
     extends: [
         eslint.configs.recommended,
