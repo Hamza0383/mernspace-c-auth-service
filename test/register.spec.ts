@@ -1,5 +1,5 @@
+import app from "../src/app";
 import request from "supertest";
-import app from "../app";
 
 describe("POST /auth/register", () => {
     describe("Given all fields", () => {
@@ -12,7 +12,7 @@ describe("POST /auth/register", () => {
                 password: "secret",
             };
             //Act
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+             
             const response = await request(app)
                 .post("/auth/register")
                 .send(userData);
@@ -28,7 +28,7 @@ describe("POST /auth/register", () => {
                 password: "secret",
             };
             //Act
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+             
             const response = await request(app)
                 .post("/auth/register")
                 .send(userData);
