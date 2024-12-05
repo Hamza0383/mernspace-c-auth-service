@@ -8,7 +8,6 @@ describe.skip("App", () => {
         expect(discout).toBe(10);
     });
     it("should return 200 status code", async () => {
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         const response = await request(app).get("/").send();
         expect(response.statusCode).toBe(200);
     });
