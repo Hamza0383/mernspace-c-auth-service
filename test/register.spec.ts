@@ -3,7 +3,7 @@ import app from "../src/app";
 import request from "supertest";
 import { AppDataSource } from "../src/config/data-source";
 import { User } from "../src/entity/User";
-import { truncateTable } from "./utils";
+import { Roles } from "../src/constants";
 
 describe("POST /auth/register", () => {
     let conection: DataSource;
@@ -11,7 +11,8 @@ describe("POST /auth/register", () => {
         conection = await AppDataSource.initialize();
     });
     beforeEach(async () => {
-        await truncateTable(conection);
+        await conection.dropDatabase();
+        await conection.synchronize();
     });
     afterAll(async () => {
         await conection.destroy();
@@ -89,6 +90,23 @@ describe("POST /auth/register", () => {
             expect((response.body as Record<string, string>).id).toBe(
                 user[0].id,
             );
+        });
+        it("should assing customer role", async () => {
+            //Arrange
+            const userData = {
+                firstName: "Hamza",
+                lastName: "Khan",
+                email: "m.hamzakhaan@gmail.com",
+                password: "secret",
+            };
+            //Act
+
+            await request(app).post("/auth/register").send(userData);
+            //Assert
+            const userRepository = conection.getRepository(User);
+            const user = await userRepository.find();
+            expect(user[0]).toHaveProperty("role");
+            expect(user[0].role).toBe(Roles.CUSTOMER);
         });
     });
     describe("Fields are missing", () => {});
