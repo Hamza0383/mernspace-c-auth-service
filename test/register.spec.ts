@@ -27,7 +27,6 @@ describe("POST /auth/register", () => {
             };
             //Act
 
-             
             const response = await request(app)
                 .post("/auth/register")
                 .send(userData);
@@ -44,7 +43,6 @@ describe("POST /auth/register", () => {
             };
             //Act
 
-             
             const response = await request(app)
                 .post("/auth/register")
                 .send(userData);
@@ -63,7 +61,6 @@ describe("POST /auth/register", () => {
             };
             //Act
 
-             
             await request(app).post("/auth/register").send(userData);
             //Assert
             const userRepository = conection.getRepository(User);
@@ -72,6 +69,26 @@ describe("POST /auth/register", () => {
             expect(user[0].firstName).toBe(userData.firstName);
             expect(user[0].lastName).toBe(userData.lastName);
             expect(user[0].email).toBe(userData.email);
+        });
+        it("should return id of the created user", async () => {
+            //Arrange
+            const userData = {
+                firstName: "Hamza",
+                lastName: "Khan",
+                email: "m.hamzakhaan@gmail.com",
+                password: "secret",
+            };
+            //Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+            //Assert
+            expect(response.body).toHaveProperty("id");
+            const userRepository = conection.getRepository(User);
+            const user = await userRepository.find();
+            expect((response.body as Record<string, string>).id).toBe(
+                user[0].id,
+            );
         });
     });
     describe("Fields are missing", () => {});
