@@ -7,17 +7,32 @@ import logger from "../config/logger";
 import registerValidator from "../validators/register-validator";
 import { TokenService } from "../services/TokenService";
 import { RefreshToken } from "../entity/RefreshToken";
+import { CredentialService } from "../services/CredentailService";
+import loginValidator from "../validators/login-validator";
 const router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
 const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
 const userService = new UserService(userRepository);
 const tokenService = new TokenService(refreshTokenRepository);
-const authController = new AuthController(userService, logger, tokenService);
+const credentialService = new CredentialService();
+const authController = new AuthController(
+    userService,
+    logger,
+    tokenService,
+    credentialService,
+);
 router.post(
     "/register",
     registerValidator,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     (req: Request, res: Response, next: NextFunction) =>
         authController.register(req, res, next),
+);
+router.post(
+    "/login",
+    loginValidator,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    (req: Request, res: Response, next: NextFunction) =>
+        authController.login(req, res, next),
 );
 export default router;
