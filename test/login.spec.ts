@@ -16,7 +16,7 @@ describe("POST /auth/login", () => {
         await conection.destroy();
     });
     describe("Given all fields", () => {
-        it("should return the 201 status code", async () => {
+        it("should return the 200 status code", async () => {
             //Arrange
             const userData = {
                 firstName: "Hamza",
@@ -34,7 +34,7 @@ describe("POST /auth/login", () => {
                 .post("/auth/login")
                 .send(loginData);
             //Assert
-            expect(response.statusCode).toBe(201);
+            expect(response.statusCode).toBe(200);
         });
     });
 });
