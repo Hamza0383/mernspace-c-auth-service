@@ -36,5 +36,25 @@ describe("POST /auth/login", () => {
             //Assert
             expect(response.statusCode).toBe(200);
         });
+        it("should return the 400 if email or password is wrong", async () => {
+            //Arrange
+            const userData = {
+                firstName: "Hamza",
+                lastName: "Khan",
+                email: "m.hamzakhaan@gmail.com",
+                password: "password",
+            };
+            const loginData = {
+                email: "m.hamzakhaan@gmail.com",
+                password: "password1",
+            };
+            //Act
+            await request(app).post("/auth/register").send(userData);
+            const response = await request(app)
+                .post("/auth/login")
+                .send(loginData);
+            //Assert
+            expect(response.statusCode).toBe(400);
+        });
     });
 });
