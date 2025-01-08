@@ -11,6 +11,7 @@ import { CredentialService } from "../services/CredentailService";
 import loginValidator from "../validators/login-validator";
 import { AuthRequest } from "../types";
 import authenticate from "../middlewares/authenticate";
+import validateRefreshToken from "../middlewares/validateRefreshToken";
 const router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
 const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
@@ -40,5 +41,15 @@ router.post(
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 router.get("/self", authenticate, (req: Request, res: Response) =>
     authController.self(req as AuthRequest, res),
+);
+
+router.post(
+    "/refresh",
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    validateRefreshToken,
+    (req: Request, res: Response, next: NextFunction) => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        authController.refresh(req as AuthRequest, res, next);
+    },
 );
 export default router;
