@@ -12,6 +12,7 @@ import loginValidator from "../validators/login-validator";
 import { AuthRequest } from "../types";
 import authenticate from "../middlewares/authenticate";
 import validateRefreshToken from "../middlewares/validateRefreshToken";
+import parseRefreshToken from "../middlewares/parseRefreshToken";
 const router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
 const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
@@ -50,6 +51,18 @@ router.post(
     (req: Request, res: Response, next: NextFunction) => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         authController.refresh(req as AuthRequest, res, next);
+    },
+);
+
+router.post(
+    "/logout",
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    authenticate,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    parseRefreshToken,
+    (req: Request, res: Response, next: NextFunction) => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        authController.logout(req as AuthRequest, res, next);
     },
 );
 export default router;
