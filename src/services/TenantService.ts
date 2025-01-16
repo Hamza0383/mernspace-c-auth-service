@@ -17,4 +17,25 @@ export class TenantService {
             throw err;
         }
     }
+    async getAll() {
+        try {
+            return await this.tenantRepository.find();
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            const err = createHttpError(
+                500,
+                "Error while finding tenant list ",
+            );
+            throw err;
+        }
+    }
+    async getOne(id: number) {
+        try {
+            return await this.tenantRepository.findOne({ where: { id } });
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            const err = createHttpError(500, "Error while finding tenant");
+            throw err;
+        }
+    }
 }
