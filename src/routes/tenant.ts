@@ -35,4 +35,14 @@ router.get("/:id", (req: Request, res: Response, next: NextFunction) =>
 router.delete("/:id", (req: Request, res: Response, next: NextFunction) =>
     tenantController.destroy(req, res, next),
 );
+router.patch(
+    "/:id",
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    authenticate,
+    canAccess([Roles.ADMIN]),
+    tenantValidator,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    (req: Request, res: Response, next: NextFunction) =>
+        tenantController.update(req, res, next),
+);
 export default router;

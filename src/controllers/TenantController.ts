@@ -4,6 +4,7 @@ import { TenantService } from "../services/TenantService";
 import { Logger } from "winston";
 import { Request } from "express-jwt";
 import createHttpError from "http-errors";
+import { validationResult } from "express-validator";
 
 export class TenantController {
     constructor(
@@ -11,6 +12,11 @@ export class TenantController {
         private logger: Logger,
     ) {}
     async create(req: CreateTenantRequest, res: Response, next: NextFunction) {
+        // Validation
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.status(400).json({ errors: result.array() });
+        }
         const { name, address } = req.body;
         this.logger.debug("Request for creating a tenant", req.body);
         try {
@@ -61,6 +67,30 @@ export class TenantController {
                 id: Number(tenantId),
             });
             res.json({ id: tenantId });
+        } catch (error) {
+            next(error);
+            return;
+        }
+    }
+    async update(req: CreateTenantRequest, res: Response, next: NextFunction) {
+        // Validation
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.status(400).json({ errors: result.array() });
+        }
+        const { name, address } = req.body;
+        const tenantId = req.params.id;
+        if (isNaN(Number(tenantId))) {
+            next(createHttpError(400, "Invalid url params."));
+        }
+        this.logger.debug("Request for updating a tenant", req.body);
+        try {
+            await this.tenantService.update(Number(tenantId), {
+                name,
+                address,
+            });
+            this.logger.info("Tenant has been updated", { id: tenantId });
+            res.json({ id: Number(tenantId) });
         } catch (error) {
             next(error);
             return;

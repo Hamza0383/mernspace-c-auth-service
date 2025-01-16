@@ -47,4 +47,16 @@ export class TenantService {
             throw err;
         }
     }
+    async update(id: number, tenantData: ITenant) {
+        try {
+            return await this.tenantRepository.update(id, tenantData);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            const err = createHttpError(
+                500,
+                "Error while updating tenant data",
+            );
+            throw err;
+        }
+    }
 }
