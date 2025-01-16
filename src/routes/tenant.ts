@@ -31,4 +31,8 @@ router.get("/", (req: Request, res: Response, next: NextFunction) =>
 router.get("/:id", (req: Request, res: Response, next: NextFunction) =>
     tenantController.getOne(req, res, next),
 );
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+router.delete("/:id", (req: Request, res: Response, next: NextFunction) =>
+    tenantController.destroy(req, res, next),
+);
 export default router;

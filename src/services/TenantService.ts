@@ -38,4 +38,13 @@ export class TenantService {
             throw err;
         }
     }
+    async delete(id: number) {
+        try {
+            return await this.tenantRepository.delete(id);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            const err = createHttpError(500, "Error while deleting tenant");
+            throw err;
+        }
+    }
 }
