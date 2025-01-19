@@ -39,4 +39,13 @@ export class UserService {
     async findById(id: number) {
         return await this.userRepository.findOne({ where: { id } });
     }
+    async getAll() {
+        return await this.userRepository.find();
+    }
+    async getOne(id: number) {
+        return await this.userRepository.findOne({ where: { id } });
+    }
+    async deleteById(id: number) {
+        return await this.userRepository.delete(id);
+    }
 }
