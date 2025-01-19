@@ -7,11 +7,13 @@ import authenticate from "../middlewares/authenticate";
 import { canAccess } from "../middlewares/canAccess";
 import { Roles } from "../constants";
 import createUserValidator from "../validators/createUserValidator";
-import { CreateUserRequest } from "../types";
+import { CreateUserRequest, UpdateUserRequest } from "../types";
+import updateUserValidator from "../validators/updateUserValidator";
+import logger from "../config/logger";
 const router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
 const userService = new UserService(userRepository);
-const userController = new UserController(userService);
+const userController = new UserController(userService, logger);
 router.post(
     "/",
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -38,5 +40,14 @@ router.delete(
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     (req, res, next) => userController.destroy(req, res, next),
 );
-
+router.patch(
+    "/:id",
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    authenticate,
+    canAccess([Roles.ADMIN]),
+    updateUserValidator,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    (req: UpdateUserRequest, res: Response, next: NextFunction) =>
+        userController.update(req, res, next),
+);
 export default router;
