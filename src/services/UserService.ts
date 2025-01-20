@@ -6,7 +6,14 @@ import createHttpError from "http-errors";
 
 export class UserService {
     constructor(private userRepository: Repository<User>) {}
-    async create({ firstName, lastName, email, password, role }: UserData) {
+    async create({
+        firstName,
+        lastName,
+        email,
+        password,
+        role,
+        tenantId,
+    }: UserData) {
         const saltRoud = 10;
         const hashPassword = await bcrypt.hash(password, saltRoud);
         const user = await this.userRepository.findOne({
@@ -23,6 +30,7 @@ export class UserService {
                 email,
                 password: hashPassword,
                 role,
+                tenant: tenantId ? { id: tenantId } : undefined,
             });
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err) {
@@ -33,8 +41,18 @@ export class UserService {
             throw error;
         }
     }
-    async findByEmail(email: string) {
-        return await this.userRepository.findOne({ where: { email } });
+    async findByEmailWithPassword(email: string) {
+        return await this.userRepository.findOne({
+            where: { email },
+            select: [
+                "id",
+                "firstName",
+                "lastName",
+                "password",
+                "email",
+                "role",
+            ],
+        });
     }
     async findById(id: number) {
         return await this.userRepository.findOne({ where: { id } });

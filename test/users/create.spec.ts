@@ -5,6 +5,8 @@ import request from "supertest";
 import app from "../../src/app";
 import { User } from "../../src/entity/User";
 import { Roles } from "../../src/constants";
+import { createTenant } from "../utils";
+import { Tenant } from "../../src/entity/Tenant";
 
 describe("POST /users", () => {
     let conection: DataSource;
@@ -26,6 +28,7 @@ describe("POST /users", () => {
     });
     describe("Given all fields", () => {
         it("should persist the user in the database", async () => {
+            const tenant = await createTenant(conection.getRepository(Tenant));
             const adminToken = jwks.token({
                 sub: "1",
                 role: Roles.ADMIN,
@@ -35,7 +38,8 @@ describe("POST /users", () => {
                 lastName: "Khan",
                 email: "m.hamzakhaan@gmail.com",
                 password: "password",
-                tenantId: 1,
+                tenantId: tenant.id,
+                role: Roles.MANAGER,
             };
             await request(app)
                 .post("/users")

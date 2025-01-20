@@ -122,7 +122,7 @@ describe("POST /auth/register", () => {
             await request(app).post("/auth/register").send(userData);
             //Assert
             const userRepository = conection.getRepository(User);
-            const user = await userRepository.find();
+            const user = await userRepository.find({ select: ["password"] });
             expect(user[0].password).not.toBe(userData.password);
             expect(user[0].password).toHaveLength(60);
             expect(user[0].password).toMatch(/^\$2b\$\d+\$/);
