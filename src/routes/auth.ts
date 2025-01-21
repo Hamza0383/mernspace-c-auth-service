@@ -28,40 +28,38 @@ const authController = new AuthController(
 router.post(
     "/register",
     registerValidator,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     (req: Request, res: Response, next: NextFunction) =>
         authController.register(req, res, next),
 );
 router.post(
     "/login",
     loginValidator,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     (req: Request, res: Response, next: NextFunction) =>
         authController.login(req, res, next),
 );
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
+
 router.get("/self", authenticate, (req: Request, res: Response) =>
     authController.self(req as AuthRequest, res),
 );
 
 router.post(
     "/refresh",
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     validateRefreshToken,
     (req: Request, res: Response, next: NextFunction) => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         authController.refresh(req as AuthRequest, res, next);
     },
 );
 
 router.post(
     "/logout",
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     authenticate,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     parseRefreshToken,
     (req: Request, res: Response, next: NextFunction) => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         authController.logout(req as AuthRequest, res, next);
     },
 );

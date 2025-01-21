@@ -15,33 +15,39 @@ const tenantController = new TenantController(tenantService, logger);
 
 router.post(
     "/",
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     authenticate,
     canAccess([Roles.ADMIN]),
     tenantValidator,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     (req: Request, res: Response, next: NextFunction) =>
         tenantController.create(req, res, next),
 );
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
+
 router.get("/", (req: Request, res: Response, next: NextFunction) =>
     tenantController.getAll(req, res, next),
 );
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-router.get("/:id", (req: Request, res: Response, next: NextFunction) =>
-    tenantController.getOne(req, res, next),
+
+router.get(
+    "/:id",
+
+    authenticate,
+    canAccess([Roles.ADMIN]),
+
+    (req: Request, res: Response, next: NextFunction) =>
+        tenantController.getOne(req, res, next),
 );
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
+
 router.delete("/:id", (req: Request, res: Response, next: NextFunction) =>
     tenantController.destroy(req, res, next),
 );
 router.patch(
     "/:id",
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     authenticate,
     canAccess([Roles.ADMIN]),
     tenantValidator,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     (req: Request, res: Response, next: NextFunction) =>
         tenantController.update(req, res, next),
 );
