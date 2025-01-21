@@ -10,17 +10,14 @@ export class TokenService {
     generateAccessToken(payload: JwtPayload) {
         let privateKey: string;
         if (!Config.PRIVATE_KEY) {
-            const err = createHttpError(500, "SECRET KEY is not set");
+            const err = createHttpError(500, "SECRET_KEY is not set");
             throw err;
         }
         try {
             privateKey = Config.PRIVATE_KEY;
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-            const err = createHttpError(
-                500,
-                "Error while generating private key",
-            );
+            const err = createHttpError(500, "Error while reading private key");
             throw err;
         }
         const accessToken = sign(payload, privateKey, {
