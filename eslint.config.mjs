@@ -1,30 +1,24 @@
-// @ts-check
-
-import eslint from "@eslint/js";
+eslint.config.mjs;
+import globals from "globals";
+import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
-
-export default tseslint.config({
-    languageOptions: {
-        parserOptions: {
-            project: true,
-            tsconfigRootDir: import.meta.dirname,
+import jest from "eslint-plugin-jest";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+export default [
+    { ignores: ["dist/"] },
+    { files: ["src//*.{js,ts,jsx,tsx}", "tests//.{js,ts,jsx,tsx}"] },
+    { files: ["**/.js"], languageOptions: { sourceType: "commonjs" } },
+    { languageOptions: { globals: globals.node } },
+    pluginJs.configs.recommended,
+    ...tseslint.configs.recommended,
+    {
+        files: ["tests/*/.{js,ts,jsx,tsx}"],
+        ...jest.configs["flat/recommended"],
+        rules: {
+            ...jest.configs["flat/recommended"].rules,
+            "jest/prefer-except-asserttions": "off",
         },
     },
-    ignores: ["dist", "node_modules", "eslint.config.js", "jest.config.js"],
-    files: ["**/*.ts"],
-    extends: [
-        eslint.configs.recommended,
-        ...tseslint.configs.recommendedTypeChecked,
-    ],
-    rules: {
-        // "no-console": "error",
-        "@typescript-eslint/no-unused-expressions": [
-            "error",
-            {
-                allowShortCircuit: true,
-                allowTernary: true,
-                allowTaggedTemplates: true,
-            },
-        ],
-    },
-});
+    { rules: { "no-console": "error" } },
+    eslintPluginPrettierRecommended,
+];
