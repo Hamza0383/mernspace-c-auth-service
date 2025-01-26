@@ -1,3 +1,5 @@
+// import fs from "fs";
+// import path from "path";
 import createHttpError from "http-errors";
 import { JwtPayload, sign } from "jsonwebtoken";
 import { Config } from "../config";
@@ -14,6 +16,9 @@ export class TokenService {
             throw err;
         }
         try {
+            // privateKey = fs.readFileSync(
+            //     path.join(__dirname, "../../certs/private.pem"),
+            // );
             privateKey = Config.PRIVATE_KEY;
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
